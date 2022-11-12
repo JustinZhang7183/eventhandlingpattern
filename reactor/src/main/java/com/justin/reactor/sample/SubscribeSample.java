@@ -42,13 +42,18 @@ public class SubscribeSample {
   /**
    * subscribe do something and react error and run some code when complete
    * and so something with subscription.
-   * this is a deprecated method, and it only does something with subscription !!!
+   * this is a deprecated method. Why does it only do something with subscription?
+   * GOTCHA: because I implement subscription custom,
+   * GOTCHA: and I don't assign the number of request before. (line56)
    */
   public void
       subscribeDoSomethingReactErrorRunSomeCodeCompleteDoSomethingWithSubscription() {
     flux.subscribe(num -> log.info(num.toString()),
         err -> log.info(err.getMessage()),
         () -> log.info("complete"),
-        subscription -> log.info(subscription.toString()));
+        subscription -> {
+          log.info(subscription.toString());
+          subscription.request(Long.MAX_VALUE);
+        });
   }
 }

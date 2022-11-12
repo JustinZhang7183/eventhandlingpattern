@@ -27,6 +27,7 @@ public class CancelSubscribeSample {
 
   /**
    * description: cancel a fixed flux.
+   * TODO: I can't cancel a fixed flux. Why?
    */
   public void cancelFixedFlux() {
     List<Integer> list = new ArrayList<>();
