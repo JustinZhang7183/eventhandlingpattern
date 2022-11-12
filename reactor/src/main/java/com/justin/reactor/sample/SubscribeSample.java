@@ -42,6 +42,7 @@ public class SubscribeSample {
   /**
    * subscribe do something and react error and run some code when complete
    * and so something with subscription.
+   * this is a deprecated method, and it only does something with subscription !!!
    */
   public void
       subscribeDoSomethingReactErrorRunSomeCodeCompleteDoSomethingWithSubscription() {
