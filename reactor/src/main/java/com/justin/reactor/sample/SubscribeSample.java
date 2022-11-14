@@ -11,7 +11,7 @@ import reactor.core.publisher.Flux;
  */
 @Slf4j
 public class SubscribeSample {
-  private final Flux<Integer> flux = Flux.just(1, 2, 3, 0);
+  private final Flux<Integer> flux = Flux.just(1, 2, 3, 0, 4);
 
   public void subscribeDoNothing() {
     flux.subscribe();

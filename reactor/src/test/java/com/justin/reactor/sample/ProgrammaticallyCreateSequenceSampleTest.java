@@ -21,4 +21,29 @@ public class ProgrammaticallyCreateSequenceSampleTest {
   public void synchronous_generate_with_clean_up_thing() {
     programmaticallyCreateSequenceSample.synchronousGenerateWithCleanup();
   }
+
+  @Test
+  public void asynchronous_multi_thread_create() {
+    programmaticallyCreateSequenceSample.asynchronousMultiThreadCreate();
+  }
+
+  @Test
+  public void asynchronous_single_thread_push() {
+    programmaticallyCreateSequenceSample.asynchronousSingleThreadPush();
+  }
+
+  @Test
+  public void hybrid_push_pull_model() {
+    programmaticallyCreateSequenceSample.hybridPushPullMode();
+  }
+
+  @Test
+  public void cleaning_up_after_push_or_create() {
+    programmaticallyCreateSequenceSample.cleaningUpAfterPushOrCreate();
+  }
+
+  @Test
+  public void handle_test() {
+    programmaticallyCreateSequenceSample.handle();
+  }
 }

@@ -21,4 +21,17 @@ public class ThreadUtil {
       throw new RuntimeException(e);
     }
   }
+
+  /**
+   * join a thread.
+   *
+   * @param thread appoint thread
+   */
+  public static void joinThread(Thread thread) {
+    try {
+      thread.join();
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
+  }
 }
