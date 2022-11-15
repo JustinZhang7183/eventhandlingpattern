@@ -1,11 +1,15 @@
 package com.justin.reactor.sample;
 
 import com.justin.reactor.util.ThreadUtil;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.Disposable;
+import reactor.core.Exceptions;
 import reactor.core.publisher.Flux;
+import reactor.util.retry.Retry;
+import reactor.util.retry.RetrySpec;
 
 /**
  * Description: the sample of handling errors.
@@ -144,6 +148,86 @@ public class HandlingErrorSample {
         .elapsed()
         .subscribe(str -> log.info(str.toString()), err -> log.info(err.toString()));
     ThreadUtil.sleepBySecond(2);
+  }
+
+  /**
+   * retryWhen.
+   */
+  public void  retryWhen() {
+    Flux<String> flux = Flux.interval(Duration.ofMillis(200)).map(input -> {
+      if (input < 3) {
+        return "tick " + input;
+      } else {
+        throw new RuntimeException("error");
+      }
+      // }).retryWhen(Retry.from(companion -> companion.take(3)));
+      // TODO: RetrySpec and RetryBackoffSpec
+    }).retryWhen(Retry.max(3));
+    flux.subscribe(log::info);
+    ThreadUtil.sleepBySecond(5);
+  }
+
+  /**
+   * retryWhen and throw.
+   */
+  public void retryWhenThrow() {
+    Flux<String> flux = Flux.interval(Duration.ofMillis(200)).map(input -> {
+      if (input < 3) {
+        return "tick " + input;
+      } else {
+        throw new RuntimeException("error");
+      }
+    }).retryWhen(Retry.from(companion -> companion.map(rs -> {
+      if (rs.totalRetries() < 3) {
+        return rs.totalRetries();
+      } else {
+        throw Exceptions.propagate(rs.failure());
+      }
+    })));
+    flux.subscribe(log::info);
+    ThreadUtil.sleepBySecond(5);
+  }
+
+  /**
+   * retryWhen with transient errors.
+   */
+  public void retryWhenWithTransientErrors() {
+    Flux<String> flux = Flux.interval(Duration.ofMillis(200)).map(input -> {
+      if (input % 3 == 0) {
+        return "tick " + input;
+      } else {
+        throw new RuntimeException("error");
+      }
+    }).retryWhen(Retry.max(3).transientErrors(true));
+    flux.subscribe(log::info);
+    ThreadUtil.sleepBySecond(5);
+  }
+
+  /**
+   * propagate and unwrap error.
+   */
+  public void propagateAndUnwrapError() {
+    Flux<String> flux = Flux.range(1, 10).map(num -> {
+      try {
+        return convert(num);
+      } catch (IOException e) {
+        throw Exceptions.propagate(e);
+      }
+    });
+    flux.subscribe(log::info, error -> {
+      if (Exceptions.unwrap(error) instanceof IOException) {
+        log.error("I/O error");
+      } else {
+        log.error("error");
+      }
+    });
+  }
+
+  private String convert(Integer num) throws IOException {
+    if (num > 3) {
+      throw new IOException("error " + num);
+    }
+    return "success " + num;
   }
 
   private static String divide100ByNum(Integer i) {

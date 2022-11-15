@@ -60,4 +60,24 @@ public class HandlingErrorSampleTest {
   public void retry() {
     handlingErrorSample.retry();
   }
+
+  @Test
+  public void retry_when() {
+    handlingErrorSample.retryWhen();
+  }
+
+  @Test
+  public void retry_when_throw() {
+    handlingErrorSample.retryWhenThrow();
+  }
+
+  @Test
+  public void retry_when_with_transient_errors() {
+    handlingErrorSample.retryWhenWithTransientErrors();
+  }
+
+  @Test
+  public void propagate_and_unwrap_error() {
+    handlingErrorSample.propagateAndUnwrapError();
+  }
 }

@@ -1,6 +1,8 @@
 package com.justin.reactor.util;
 
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Description: the utils of Thread.
@@ -23,13 +25,15 @@ public class ThreadUtil {
   }
 
   /**
-   * join a thread.
+   * join threads.
    *
-   * @param thread appoint thread
+   * @param threads appoint threads
    */
-  public static void joinThread(Thread thread) {
+  public static void joinThread(Thread... threads) {
     try {
-      thread.join();
+      for (Thread thread : threads) {
+        thread.join();
+      }
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }
