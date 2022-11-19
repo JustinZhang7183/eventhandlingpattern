@@ -48,7 +48,7 @@ public class BackpressureAndReshapeRequestsSample {
 
   /**
    * change the demand from downstream.
-   * TODO: how do test effect of backpressure using limitRate?
+   * TODO: how to test effect of backpressure using limitRate?
    */
   public void operatorsThatChangeTheDemandFromDownstream() {
     Flux.range(1, 20).limitRate(5)
