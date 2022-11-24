@@ -49,7 +49,7 @@ public class ThreadingAndSchedulerSample {
   }
 
   public void elasticScheduler() {
-    Flux.just("1", "2").subscribeOn(Schedulers.elastic()).subscribe(log::info);
+    Flux.just("1", "2").subscribeOn(Schedulers.boundedElastic()).subscribe(log::info);
   }
 
   /**
