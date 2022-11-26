@@ -1,4 +1,4 @@
-package com.justin.reactor.advancedfeatures.connectableflux;
+package com.justin.reactor.advancedfeatures;
 
 import com.justin.reactor.util.ThreadUtil;
 import org.junit.jupiter.api.Test;

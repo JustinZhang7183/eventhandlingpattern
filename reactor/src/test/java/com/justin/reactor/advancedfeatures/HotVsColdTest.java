@@ -1,4 +1,4 @@
-package com.justin.reactor.advancedfeatures.hotvscold;
+package com.justin.reactor.advancedfeatures;
 
 import static reactor.core.publisher.Sinks.EmitFailureHandler.FAIL_FAST;
 
