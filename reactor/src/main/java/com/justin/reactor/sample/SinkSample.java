@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Subscription;
 import reactor.core.Disposable;
 import reactor.core.publisher.BaseSubscriber;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
 import reactor.util.concurrent.Queues;
 
@@ -35,7 +36,7 @@ public class SinkSample {
       replaySink.asFlux()
           .takeWhile(num -> num < 4)
           .log()
-          .blockLast(); // TODO: how does this work?
+          .blockLast();
     });
     thread1.start();
     ThreadUtil.sleepBySecond(1);
@@ -93,12 +94,12 @@ public class SinkSample {
   }
 
   /**
-   * multicast backpressure buffer.
+   * multicast backpressure buffer. TODO: how to calculate the size of onBackpressureBuffer?
    */
   public void multicastBackpressureBuffer() {
     // By default, if all of its subscribers are cancelled
     // it clears its internal buffer and stops accepting new subscribers
-    Sinks.Many<Integer> multicastSink = Sinks.many().multicast().onBackpressureBuffer(2, true);
+    Sinks.Many<Integer> multicastSink = Sinks.many().multicast().onBackpressureBuffer(1, true);
     multicastSink.emitNext(1, Sinks.EmitFailureHandler.FAIL_FAST);
     multicastSink.emitNext(2, Sinks.EmitFailureHandler.FAIL_FAST);
     multicastSink.emitNext(3, Sinks.EmitFailureHandler.FAIL_FAST);

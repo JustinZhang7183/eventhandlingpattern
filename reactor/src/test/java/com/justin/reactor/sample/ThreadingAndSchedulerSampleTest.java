@@ -43,11 +43,6 @@ public class ThreadingAndSchedulerSampleTest {
   }
 
   @Test
-  public void parallel_interval() {
-    threadingAndSchedulerSample.parallelInterval();
-  }
-
-  @Test
   public void publish_on() {
     threadingAndSchedulerSample.publishOn();
   }

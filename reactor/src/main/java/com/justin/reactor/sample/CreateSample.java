@@ -7,6 +7,7 @@ import reactor.core.publisher.Mono;
 
 /**
  * Description: the sample of creating mono and flux (publisher) by their factory methods.
+ * nothing will happen until subscribe.
  *
  * @author Justin_Zhang
  * @date 11/11/2022 16:03

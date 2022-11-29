@@ -1,9 +1,12 @@
 package com.justin.reactor.sample;
 
 import com.justin.reactor.util.ThreadUtil;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.Disposable;
 import reactor.core.Exceptions;
@@ -192,9 +195,12 @@ public class HandlingErrorSample {
    * retryWhen with transient errors.
    */
   public void retryWhenWithTransientErrors() {
+    AtomicInteger atomicInteger = new AtomicInteger();
     Flux<String> flux = Flux.interval(Duration.ofMillis(200)).map(input -> {
-      if (input % 3 == 0) {
-        return "tick " + input;
+      atomicInteger.incrementAndGet();
+      if (atomicInteger.get() % 3 != 0) {
+        log.info("{} % 3 == {}", atomicInteger.get(), atomicInteger.get() % 3);
+        return "tick " + atomicInteger.get();
       } else {
         throw new RuntimeException("error");
       }

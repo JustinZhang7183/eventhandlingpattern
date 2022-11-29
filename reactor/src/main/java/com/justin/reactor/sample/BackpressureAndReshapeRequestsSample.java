@@ -54,7 +54,7 @@ public class BackpressureAndReshapeRequestsSample {
     Flux.range(1, 20).limitRate(5)
         .subscribe(num -> log.info("limitRateWithPrefetch: {}", num.toString()));
 
-    Flux.range(1, 20).limitRate(2, 5)
+    Flux.range(1, 20).limitRate(5, 2)
         .subscribe(num -> log.info("limitRateWithTide: {}", num.toString()));
 
     Flux.range(1, 20).limitRequest(5)

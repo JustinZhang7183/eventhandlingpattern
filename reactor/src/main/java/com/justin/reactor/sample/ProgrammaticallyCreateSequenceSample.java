@@ -243,8 +243,8 @@ public class ProgrammaticallyCreateSequenceSample {
 
     public void generateChunkData() {
       List<String> list = new ArrayList<>();
-      list.add("value 1");
-      list.add("value 2");
+      list.add("value 1 from thread: " + Thread.currentThread().getName());
+      list.add("value 2 from thread: " + Thread.currentThread().getName());
       processor.process((List<T>) list);
     }
 

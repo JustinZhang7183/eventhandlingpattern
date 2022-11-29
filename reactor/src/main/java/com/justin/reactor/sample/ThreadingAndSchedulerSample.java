@@ -5,6 +5,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
@@ -14,7 +15,7 @@ import reactor.core.scheduler.Schedulers;
  * Description: the sample of threading and scheduler.
  * <p>
  * 1.first of all, reactor can be considered to be concurrency-agnostic.
- * whether enable concurrency, it depends on you TODO: how?
+ * whether enable concurrency, it depends on you
  * </p>
  * <p>
  * 2.most operators continue working in the thread on which the previous operator executed.
@@ -33,7 +34,10 @@ public class ThreadingAndSchedulerSample {
    * simple proving for above third point.
    */
   public void simpleProving() {
-    Mono<String> mono = Mono.just("hello");
+    Mono<String> mono = Mono.just("hello").map(str -> {
+      log.info("plus world");
+      return str + " world!";
+    });
     Thread thread = new Thread(() -> mono
         .subscribe(log::info));
     thread.start();
@@ -44,12 +48,19 @@ public class ThreadingAndSchedulerSample {
     Flux.just("1", "2").subscribeOn(Schedulers.immediate()).subscribe(log::info);
   }
 
+  /**
+   * single scheduler usage.
+   */
   public void singleScheduler() {
     Flux.just("1", "2").subscribeOn(Schedulers.single()).subscribe(log::info);
+    Flux.just("3", "4").subscribeOn(Schedulers.single()).subscribe(log::info);
+    Flux.just("5", "6").subscribeOn(Schedulers.newSingle("singleOne")).subscribe(log::info);
+    Flux.just("7", "8").subscribeOn(Schedulers.newSingle("singleTwo")).subscribe(log::info);
   }
 
   public void elasticScheduler() {
     Flux.just("1", "2").subscribeOn(Schedulers.boundedElastic()).subscribe(log::info);
+    Flux.just("3", "4").subscribeOn(Schedulers.boundedElastic()).subscribe(log::info);
   }
 
   /**
@@ -59,30 +70,15 @@ public class ThreadingAndSchedulerSample {
    */
   public void boundedElasticScheduler() {
     Flux.just("1", "2").subscribeOn(Schedulers.boundedElastic()).subscribe(log::info);
+    Flux.just("3", "4").subscribeOn(Schedulers.boundedElastic()).subscribe(log::info);
   }
 
   /**
    * a fixed pool of workers. It creates as many workers as CPU cores you have.
    */
   public void parallelScheduler() {
-    List<String> list = new ArrayList<>();
-    for (int i = 0; i < 1000; i++) {
-      list.add(String.valueOf(i));
-    }
-    Flux.fromIterable(list).map(num -> {
-      log.info(num);
-      return num;
-    }).subscribeOn(Schedulers.parallel()).subscribe(log::info);
-    ThreadUtil.sleepBySecond(10);
-  }
-
-  /**
-   * parallel interval sample.
-   */
-  public void parallelInterval() {
-    Flux.interval(Duration.ofMillis(100), Schedulers.newParallel("parallel", 10))
-        .subscribe(num -> log.info(num.toString()));
-    ThreadUtil.sleepBySecond(10);
+    Flux.just("1", "2").subscribeOn(Schedulers.parallel()).subscribe(log::info);
+    Flux.just("3", "4").subscribeOn(Schedulers.parallel()).subscribe(log::info);
   }
 
   /**
@@ -122,7 +118,7 @@ public class ThreadingAndSchedulerSample {
           log.info("second map");
           return "value " + i;
         });
-    Thread thread = new Thread(() -> flux.subscribe(System.out::println));
+    Thread thread = new Thread(() -> flux.subscribe(log::info));
     thread.start();
     ThreadUtil.joinThread(thread);
   }
