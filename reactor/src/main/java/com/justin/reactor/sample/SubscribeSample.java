@@ -18,7 +18,7 @@ public class SubscribeSample {
   }
 
   public void subscribeDoSomething() {
-    flux.subscribe(num -> log.info(num.toString()));
+    flux.subscribe(num ->  log.info(num.toString()));
   }
 
   /**
@@ -53,7 +53,7 @@ public class SubscribeSample {
         () -> log.info("complete"),
         subscription -> {
           log.info(subscription.toString());
-          subscription.request(Long.MAX_VALUE);
+          subscription.request(2);
         });
   }
 }
